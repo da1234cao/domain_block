@@ -1,0 +1,4 @@
+**/build
+windows/WFP/bin
+windows/WFP/block/x64
+windows/WFP/block/.vs
