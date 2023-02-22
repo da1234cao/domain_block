@@ -86,6 +86,7 @@ NTSTATUS wfp_init(PDEVICE_OBJECT dev_obj)
 
 void wfp_uninit()
 {
+	KdPrint(("|LIBBLOCK|wfp_uninit"));
 	unregister_callout();
 	if (wfp_engine_handle)
 	{

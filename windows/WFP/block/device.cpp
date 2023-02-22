@@ -9,7 +9,7 @@ NTSTATUS device_init(WDFDRIVER driver, WDFDEVICE& device)
 	NTSTATUS status = STATUS_SUCCESS;
 	KdPrint(("|LIBBLOCK|device_init|begain."));
 
-	auto device_init = WdfControlDeviceInitAllocate(driver, &SDDL_DEVOBJ_SYS_ALL_ADM_ALL);
+	auto device_init = WdfControlDeviceInitAllocate(driver, &SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_RW_RES_R);
 	if (!device_init) {
 		status = STATUS_INSUFFICIENT_RESOURCES;
 		KdPrint(("|LIBBLOCK|device_init|failed to allocate WDF control device: %d", status));
@@ -17,7 +17,7 @@ NTSTATUS device_init(WDFDRIVER driver, WDFDEVICE& device)
 	}
 
 	WdfDeviceInitSetDeviceType(device_init, FILE_DEVICE_NETWORK);
-	WdfDeviceInitSetIoType(device_init, WdfDeviceIoDirect);
+	WdfDeviceInitSetIoType(device_init, WdfDeviceIoBuffered); // 缓冲模式，类似DO_BUFFERED_IO
 	status = WdfDeviceInitAssignName(device_init, &device_name);
 	if (!NT_SUCCESS(status)) {
 		KdPrint(("|LIBBLOCK|device_init|failed to create WDF device name:%d", status));
@@ -35,6 +35,8 @@ NTSTATUS device_init(WDFDRIVER driver, WDFDEVICE& device)
 	WDF_OBJECT_ATTRIBUTES_INIT(&obj_attrs);
 
 	status = WdfDeviceCreate(&device_init, &obj_attrs, &device);
+
+
 	if (!NT_SUCCESS(status))
 	{
 		KdPrint(("|LIBBLOCK|device_init|failed to create WDF control device: %d", status));
@@ -46,12 +48,15 @@ NTSTATUS device_init(WDFDRIVER driver, WDFDEVICE& device)
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&queue_config, WdfIoQueueDispatchParallel);
 	queue_config.EvtIoRead = NULL;
 	queue_config.EvtIoWrite = NULL;
+	 queue_config.EvtIoDeviceControl = device_ioctl; // 请求的处理函数
 	queue_config.EvtIoDeviceControl = device_ioctl;
 	WDF_OBJECT_ATTRIBUTES_INIT(&obj_attrs);
 	obj_attrs.ExecutionLevel = WdfExecutionLevelPassive;
 	obj_attrs.SynchronizationScope = WdfSynchronizationScopeNone;
+
 	WDFQUEUE queue;
 	status = WdfIoQueueCreate(device, &queue_config, &obj_attrs, &queue);
+
 	if (!NT_SUCCESS(status))
 	{
 		KdPrint(("|LIBBLOCK|device_init|failed to create default WDF queue: %d", status));
@@ -74,7 +79,8 @@ NTSTATUS device_init(WDFDRIVER driver, WDFDEVICE& device)
 void device_uninit()
 {
 	// 不用删除符号链接，框架会自动删除
+	KdPrint(("|LIBBLOCK|device_uninit."));
 	UNICODE_STRING dos_device_name = { 0 };
-	RtlInitUnicodeString(&dos_device_name, L"\\??\\libredirect");
+	RtlInitUnicodeString(&dos_device_name, L"\\??\\libblock");
 	IoDeleteSymbolicLink(&dos_device_name);
 }

@@ -59,7 +59,8 @@ NTSTATUS del_rule(rule_t& rule) {
 		rule_node_t* rule_node = CONTAINING_RECORD(node, rule_node_t, list_entry);
 		if (strcmp(rule_node->rule.remote_addr_info.domin_str, domain) == 0) {
 			KdPrint(("|LIBBLOCK|del_rule|del %s kernel rule.", domain));
-			ExFreePoolWithTag(rule_node, WDF_BLOCK_TAG);
+			RemoveEntryList(node); // 从链表结构中取下该节点
+			ExFreePoolWithTag(rule_node, WDF_BLOCK_TAG); // 删除分配的内存
 			break;
 		}
 	}
@@ -69,6 +70,7 @@ NTSTATUS del_rule(rule_t& rule) {
 
 NTSTATUS clear_rules()
 {
+	KdPrint(("|LIBBLOCK|clear_rules"));
 	WdfWaitLockAcquire(rule_list_lock, nullptr);
 	while (IsListEmpty(&rule_list) == FALSE) {
 		PLIST_ENTRY node = RemoveTailList(&rule_list);
@@ -90,8 +92,8 @@ BOOLEAN is_hint_rule(connect_info_t& connect_info)
 		rule_node_t* rule_node = CONTAINING_RECORD(node, rule_node_t, list_entry);
 		if (connect_info.ip_version == 4) {
 			for (int i = 0; i < rule_node->rule.remote_addr_info.v4.cnt; i++) {
-				KdPrint(("|LIBBLOCK|is_hint_rule|look ip is %d.%d.%d.%d", FORMAT_ADDR4(connect_info.v4.remote_address)));
-				KdPrint(("|LIBBLOCK|is_hint_rule|current matching ip is %d.%d.%d.%d", FORMAT_ADDR4(rule_node->rule.remote_addr_info.v4.domain_address[i])));
+				// KdPrint(("|LIBBLOCK|is_hint_rule|look ip is %d.%d.%d.%d", FORMAT_ADDR4(connect_info.v4.remote_address)));
+				// KdPrint(("|LIBBLOCK|is_hint_rule|current matching ip is %d.%d.%d.%d", FORMAT_ADDR4(rule_node->rule.remote_addr_info.v4.domain_address[i])));
 				if (is_same_ipv4(connect_info.v4.remote_address, rule_node->rule.remote_addr_info.v4.domain_address[i])) {
 					result = TRUE;
 					KdPrint(("|LIBBLOCK|is_hint_rule|hint rule: ip is %d.%d.%d.%d, action is %d", FORMAT_ADDR4(connect_info.v4.remote_address), rule_node->rule.action));

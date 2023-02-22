@@ -9,14 +9,13 @@
 #include "rule.h"
 #include "wfp.h"
 
-
 VOID libblock_unload(IN WDFDRIVER driver)
 {
 	UNREFERENCED_PARAMETER(driver);
 	KdPrint(("|LIBBLOCK|libblock_unload"));
 	clear_rules();
-	// wfp_uninit();
-	// device_uninit();
+	wfp_uninit();
+	//device_uninit();
 }
 
 
