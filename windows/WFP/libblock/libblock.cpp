@@ -2,12 +2,12 @@
 #include <cassert>
 
 #include "libblock.h"
-#include "../utils/log.hpp"
+#include "utils/log.h"
 
 DWORD libblock_init(DWORD init_type, HANDLE* engine_handle)
 {
 	Log::SPDLOG::getInstance().init("libblock.txt", "libblock_logger", "Debug", 5*1024*1024, 3, false);
-    Log::LOG_DEBUG("libblock init.");
+    LOG_DEBUG("libblock init.");
 
 	FWPM_SESSION session = { 0 };
 	session.flags = FWPM_SESSION_FLAG_DYNAMIC;	// session结束后自动销毁所有callout和filter
@@ -42,7 +42,7 @@ DWORD libblock_init(DWORD init_type, HANDLE* engine_handle)
 			FwpmTransactionAbort(*engine_handle);
 			return status;
 		}
-		Log::LOG_DEBUG("libblock init: add ipv4 block callout.");
+		LOG_DEBUG("libblock init: add ipv4 block callout.");
 	}
 	if (init_type & LIBBLOCK_INIT_IPV6)
 	{
@@ -63,7 +63,7 @@ DWORD libblock_init(DWORD init_type, HANDLE* engine_handle)
 			FwpmTransactionAbort(*engine_handle);
 			return status;
 		}
-		Log::LOG_DEBUG("libblock init: add ipv6 block callout.");
+		LOG_DEBUG("libblock init: add ipv6 block callout.");
 	}
 
 	FWPM_SUBLAYER sublayer = { 0 };
@@ -80,7 +80,7 @@ DWORD libblock_init(DWORD init_type, HANDLE* engine_handle)
 		FwpmTransactionAbort(*engine_handle);
 		return status;
 	}
-	Log::LOG_DEBUG("libblock init: add block sublayer.");
+	LOG_DEBUG("libblock init: add block sublayer.");
 
 	if (init_type & LIBBLOCK_INIT_IPV4)
 	{
@@ -103,7 +103,7 @@ DWORD libblock_init(DWORD init_type, HANDLE* engine_handle)
 			FwpmTransactionAbort(*engine_handle);
 			return status;
 		}
-		Log::LOG_DEBUG("libblock init: add ipv4 block filter.");
+		LOG_DEBUG("libblock init: add ipv4 block filter.");
 	}
 
 	if (init_type & LIBBLOCK_INIT_IPV6)
@@ -127,7 +127,7 @@ DWORD libblock_init(DWORD init_type, HANDLE* engine_handle)
 			FwpmTransactionAbort(*engine_handle);
 			return status;
 		}
-		Log::LOG_DEBUG("libblock init: add ipv6 block filter.");
+		LOG_DEBUG("libblock init: add ipv6 block filter.");
 	}
 
 	status = FwpmTransactionCommit(*engine_handle);
@@ -138,7 +138,7 @@ DWORD libblock_init(DWORD init_type, HANDLE* engine_handle)
 
 void libblock_uninit(HANDLE engine_handle)
 {
-	Log::LOG_DEBUG("libblock uninit.");
+	LOG_DEBUG("libblock uninit.");
 	FwpmEngineClose(engine_handle);
 }
 
@@ -147,13 +147,13 @@ HANDLE libblock_open()
 	HANDLE handle = CreateFileA("\\\\.\\libblock",
 		GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL, INVALID_HANDLE_VALUE);
-    Log::LOG_DEBUG("libblock opne handle {}.", handle);
+    LOG_DEBUG("libblock opne handle {}.", handle);
     return handle;
 }
 
 void libblock_close(HANDLE handle)
 {
-	Log::LOG_DEBUG("libblock close.");
+	LOG_DEBUG("libblock close.");
 	CloseHandle(handle);
 }
 

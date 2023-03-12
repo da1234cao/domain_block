@@ -1,0 +1,11 @@
+# 日志文件
+[log]
+path = 'E:\domain_block_services.log'
+level = 'trace'
+max_file_size = '1' # MB单位
+max_files = '3'
+
+# 服务器配置
+[server]
+ip = '0.0.0.0'
+port = '6666' # 服务器监听端口
