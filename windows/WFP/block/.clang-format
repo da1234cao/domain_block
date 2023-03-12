@@ -1,0 +1,4 @@
+# Visual Studio 生成的 .clang-format 文件
+
+BasedOnStyle: LLVM
+SortIncludes: false
