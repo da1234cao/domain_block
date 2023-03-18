@@ -1,6 +1,6 @@
 # 日志文件
 [log]
-path = 'E:\domain_block_services.log'
+path = 'C:\domain_block_services.log'
 level = 'trace'
 max_file_size = '1' # MB单位
 max_files = '3'

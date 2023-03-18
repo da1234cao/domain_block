@@ -31,15 +31,15 @@ public:
 
   void stop();
 
-private:
-  void do_read();
-  void do_write();
-  void handle_read(const boost::system::error_code &ec,
-                   size_t bytes_transferred);
-  void handle_write(const boost::system::error_code &ec,
-                    size_t bytes_transferred);
+protected:
+  virtual void do_read();
+  virtual void do_write();
+  virtual void handle_read(const boost::system::error_code &ec,
+                           size_t bytes_transferred);
+  virtual void handle_write(const boost::system::error_code &ec,
+                            size_t bytes_transferred);
 
-private:
+protected:
   boost::asio::ip::tcp::socket m_socket;
   int m_write_size = 0;
   std::array<char, 4096> m_read_buffer;

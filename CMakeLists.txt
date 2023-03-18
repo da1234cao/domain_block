@@ -60,6 +60,11 @@ FetchContent_MakeAvailable(json)
 include_directories(${tomlplusplus_SOURCE_DIR}/include)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    if(MSVC)
+      # Disable warning C4819 (cannot represent character) for all targets
+      add_compile_options(/wd4819) # 字符提示禁用.代码中有的是在linux中编辑的是utf8编码，win上默认是gbk编码
+      add_compile_options(/wd4101) # 禁用未使用局部变量提示。
+    endif()
     add_subdirectory(windows/WFP)
 else()
 

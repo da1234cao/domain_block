@@ -5,8 +5,7 @@ project ("domain_block_service")
 # link_directories(${PROJECT_SOURCE_DIR}/bin)
 
 # server
-set(SERVER_SRC ${CMAKE_SOURCE_DIR}/server/server.cpp
-               ${CMAKE_SOURCE_DIR}/server/connection.cpp)
+set(SERVER_SRC ${CMAKE_SOURCE_DIR}/server/connection.cpp)
 
 # service
 set(SERVICE_SRC main.cpp

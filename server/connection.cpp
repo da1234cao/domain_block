@@ -1,10 +1,10 @@
 #include "connection.h"
 
-#include <boost/asio/placeholders.hpp>
-#include <boost/bind/bind.hpp>
-
 #include "nlohmann/json.hpp"
 #include "utils/log.h"
+
+#include <boost/asio/placeholders.hpp>
+#include <boost/bind/bind.hpp>
 
 void connection_manager::start(connection_ptr c) {
   m_connections.insert(c);
