@@ -8,9 +8,9 @@ config::config() {
 
   // da1234cao组织下的域名阻断配置文件
   // 暂时没去查这种设置为啥不对
-  //  QSettings settings("da1234cao", "doamin_block");
+  //  QSettings settings("da1234cao", "domain_block");
   QCoreApplication::setOrganizationName("da1234cao");
-  QCoreApplication::setApplicationName("doamin_block");
+  QCoreApplication::setApplicationName("domain_block");
 
   // 获取配置文件路径
   QString appName = QCoreApplication::applicationName();
