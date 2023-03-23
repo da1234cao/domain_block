@@ -1,0 +1,8 @@
+[Unit]
+Description=A domain block service
+[Service]
+ExecStart=/home/dacao/work/self/domain_block/bin/domain_block_service
+ExecStop=/bin/kill -TERM $MAINPID
+Type=simple
+[Install]
+WantedBy=multi-user.target

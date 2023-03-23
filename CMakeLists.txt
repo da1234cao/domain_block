@@ -2,12 +2,6 @@ cmake_minimum_required (VERSION 3.11)
 
 project ("doamin_block")
 
-# vs库静态链接
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" /MT)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE}" /MTd)
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}" /MT)
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_RELEASE}" /MTd)
-
 # 可执行文件输出到bin目录
 ## 静态库
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
@@ -20,7 +14,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 # boost
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-  find_package(Boost REQUIRED thread)
+  find_package(Boost REQUIRED COMPONENTS thread system filesystem)
 else()
   find_package(Boost REQUIRED)
 endif()
@@ -64,8 +58,14 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
       # Disable warning C4819 (cannot represent character) for all targets
       add_compile_options(/wd4819) # 字符提示禁用.代码中有的是在linux中编辑的是utf8编码，win上默认是gbk编码
       add_compile_options(/wd4101) # 禁用未使用局部变量提示。
+      # vs库静态链接
+      set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" /MT)
+      set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE}" /MTd)
+      set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}" /MT)
+      set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_RELEASE}" /MTd)
     endif()
     add_subdirectory(windows/WFP)
 else()
-
+    add_subdirectory(UI/domain_block_client)
+    add_subdirectory(linux)
 endif()

@@ -159,7 +159,7 @@ void rules::save_info_to_file() {
     for (auto &info : m_rules_info) {
       // 获取tuple的最后一个元素有点麻烦，这里直接使用数字
       stream << std::get<0>(info) << m_separator << std::get<1>(info)
-             << Qt::endl;
+             << endl;
     }
     rules_file.close();
   }
