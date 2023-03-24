@@ -8,7 +8,7 @@ int main(int argc, char *agrv[]) {
   boost::filesystem::path cur_path =
       boost::dll::program_location().parent_path();
   boost::filesystem::path cfg_path = cur_path / "config.toml";
-  std::cout << cfg_path.string() << std::endl;
+
   // 解析配置文件
   config::instance().parse_toml(cfg_path);
 
