@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# 停止服务-服务配置文件会自动被删除
+systemctl stop domain_block
+systemctl daemon-reload
+
+echo "prerm end."

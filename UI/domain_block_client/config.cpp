@@ -17,7 +17,7 @@ config::config() {
   QString orgName = QCoreApplication::organizationName();
   m_default_path =
       QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
-      "/" + orgName + "/" + appName + ".ini";
+      "/domain_block" + "/" + appName + ".ini";
 
   // qDebug() << "Copied config file from" << m_default_path;
 

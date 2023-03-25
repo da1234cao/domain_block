@@ -40,15 +40,13 @@ include_directories(${spdlog_SOURCE_DIR}/include)
 message("fetch spdlog from gitee instead of github")
 
 # toml: 
+include(FetchContent)
 FetchContent_Declare(
     tomlplusplus
-    GIT_REPOSITORY https://gitee.com/actcwlf/tomlplusplus.git
-    GIT_TAG        v3.1.0
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG        v3.3.0
 )
 FetchContent_MakeAvailable(tomlplusplus)
-include_directories(${tomlplusplus_SOURCE_DIR}/include)
-# set(CPACK_EXCLUDE_FROM_ALL ${CPACK_EXCLUDE_FROM_ALL} ${tomlplusplus_SOURCE_DIR})
-message("fetch toml from gitee instead of github")
 
 # json
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)

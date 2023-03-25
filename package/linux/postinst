@@ -3,4 +3,4 @@
 systemctl daemon-reload  
 systemctl start domain_block
 
-echo "postinst end.\n"
+echo "postinst end."

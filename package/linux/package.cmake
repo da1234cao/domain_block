@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.11)
 
 set(CPACK_PACKAGE_DESCRIPTION "domain block service")
@@ -12,7 +11,6 @@ set(CPACK_PACKAGE_VERSION_PATCH 0)
 
 set(INSTALL_DIR /opt/domain_block)
 set(SYSTEMD_DIR /etc/systemd/system/)
-set(POST_INSTALL_SCRIPT ${CMAKE_SOURCE_DIR}/linux/package/post_install.sh)
 
 # 服务程序
 install(TARGETS domain_block_service RUNTIME DESTINATION ${INSTALL_DIR})
@@ -24,13 +22,23 @@ install(FILES  ${CMAKE_SOURCE_DIR}/linux/domain_block_service.toml DESTINATION $
 install(TARGETS domain_block_client RUNTIME DESTINATION ${INSTALL_DIR})
 install(FILES ${CMAKE_SOURCE_DIR}/UI/domain_block_client/domain_block_client.ini DESTINATION ${INSTALL_DIR})
 
-
 # systemctl配置文件
 install(FILES ${CMAKE_SOURCE_DIR}/linux/domain_block.service DESTINATION ${SYSTEMD_DIR})
 
-set(CPACK_DEBIAN_PACKAGE_POST_INSTALL_SCRIPT_FILE ${POST_INSTALL_SCRIPT})
-
 set(CPACK_GENERATOR "DEB")
+
+# 安装/卸载前后的执行脚本
+set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_SOURCE_DIR}/package/linux/postinst;
+                                       ${CMAKE_SOURCE_DIR}/package/linux/prerm;
+                                       ${CMAKE_SOURCE_DIR}/package/linux/postrm)
+
+# 程序发布的时候没有携带qt库，需要用户自行安装
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt5-default")
+
+# 忽略所有路径中包含"toml"的文件
+set(CPACK_SOURCE_IGNORE_FILES
+    /.*toml.*
+)
 
 include(CPack)
 

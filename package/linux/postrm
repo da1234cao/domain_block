@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# 获取执行 sudo 命令的用户名
+SUDO_USER=$(whoami)
+
+# 删除domain_block_client在家目录里的配置和日志文件
+## 当然也有可能用户没有在/home下创建家目录,那就得去/etc/passwd配置文件里面去查找了
+rm -rf /home/$SUDO_USER/.config/domain_block
+
+# 删除doma_block_service在/var/log/domain_block里产生的日志文件
+rm -rf /var/log/domain_block
+
+echo "postrm end."

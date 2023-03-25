@@ -113,16 +113,13 @@ void rules::send_rules() {
   qDebug() << serverIp << ":" << serverPort;
   socket->connectToHost(QHostAddress(serverIp), serverPort);
 
-  // 当服务端接收到完整的json后，会自动断开连接;当连接断开时自动销毁QTcpSocket对象
+  // 当服务端接收到完整的json后，服务端会自动断开连接;当连接断开时自动销毁QTcpSocket对象
   connect(socket, &QTcpSocket::disconnected, &QTcpSocket::deleteLater);
 
   connect(socket, &QTcpSocket::readyRead, [=]() {
     QByteArray data = socket->readAll();
     qDebug() << "Received data: " << data;
   });
-
-  connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-          SLOT(handleError(QAbstractSocket::SocketError)));
 
   // 发送数据
   socket->write(rulesJsonString.toUtf8());
@@ -158,8 +155,7 @@ void rules::save_info_to_file() {
     QTextStream stream(&rules_file);
     for (auto &info : m_rules_info) {
       // 获取tuple的最后一个元素有点麻烦，这里直接使用数字
-      stream << std::get<0>(info) << m_separator << std::get<1>(info)
-             << endl;
+      stream << std::get<0>(info) << m_separator << std::get<1>(info) << endl;
     }
     rules_file.close();
   }

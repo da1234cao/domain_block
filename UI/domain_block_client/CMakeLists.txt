@@ -57,9 +57,9 @@ set_target_properties(domain_block_client PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS domain_block_client
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+# install(TARGETS domain_block_client
+#     BUNDLE DESTINATION .
+#     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(domain_block_client)
