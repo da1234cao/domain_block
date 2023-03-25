@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.11)
 
-project ("doamin_block")
+project ("domain_block")
 
 # 可执行文件输出到bin目录
 ## 静态库
@@ -13,6 +13,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 include_directories(${CMAKE_SOURCE_DIR})
 
 # boost
+set(Boost_USE_STATIC_LIBS ON)
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   find_package(Boost REQUIRED COMPONENTS thread system filesystem)
 else()
@@ -46,12 +47,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(tomlplusplus)
 include_directories(${tomlplusplus_SOURCE_DIR}/include)
+# set(CPACK_EXCLUDE_FROM_ALL ${CPACK_EXCLUDE_FROM_ALL} ${tomlplusplus_SOURCE_DIR})
 message("fetch toml from gitee instead of github")
 
 # json
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
-include_directories(${tomlplusplus_SOURCE_DIR}/include)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     if(MSVC)
@@ -68,4 +69,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 else()
     add_subdirectory(UI/domain_block_client)
     add_subdirectory(linux)
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/package/linux")
+    include(package)
 endif()

@@ -10,7 +10,7 @@ config::config() {
   // 暂时没去查这种设置为啥不对
   //  QSettings settings("da1234cao", "domain_block");
   QCoreApplication::setOrganizationName("da1234cao");
-  QCoreApplication::setApplicationName("domain_block");
+  QCoreApplication::setApplicationName("domain_block_client");
 
   // 获取配置文件路径
   QString appName = QCoreApplication::applicationName();
@@ -24,7 +24,9 @@ config::config() {
   // 如果默认路径的配置文件不存在，则拷贝一份
   QFileInfo defaultFile(m_default_path);
   if (!defaultFile.exists()) {
-    QString currentPath = QDir::currentPath() + "/" + appName + ".ini";
+    QString currentPath =
+        QCoreApplication::applicationDirPath() + "/" + appName + ".ini";
+    qDebug() << currentPath;
     utils::copyFile(currentPath, m_default_path);
   }
 

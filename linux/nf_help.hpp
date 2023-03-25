@@ -77,7 +77,24 @@ public:
     exec_rules(nf_rules);
   }
 
-  ~nf_help() { flush_all(); }
+  void flush_all() {
+    std::vector<std::string> nf_exit_cmds;
+    // 清空链
+    nf_exit_cmds.emplace_back("nft flush chain inet block OUTPUT");
+    // 删除链
+    nf_exit_cmds.emplace_back("nft delete chain inet block OUTPUT");
+    // 清空表
+    nf_exit_cmds.emplace_back("nft flush table inet block");
+    // 删除表
+    nf_exit_cmds.emplace_back("nft delete table inet block");
+
+    exec_rules(nf_exit_cmds);
+  }
+
+  // 这里在使用systemctl管理的时候，析构函数没有执行完便退出，不知道为什么
+  // 单独运行程序，不使用systemctl则没有这个问题
+  // 所以，这里把flush_all()放在main()末尾显示执行
+  // ~nf_help() { flush_all(); }
 
 private:
   nf_help() {
@@ -92,20 +109,6 @@ private:
         "priority filter; policy accept; }");
 
     exec_rules(nf_init_cmds);
-  }
-
-  void flush_all() {
-    std::vector<std::string> nf_exit_cmds;
-    // 清空链
-    nf_exit_cmds.emplace_back("nft flush chain inet block OUTPUT");
-    // 删除链
-    nf_exit_cmds.emplace_back("nft delete chain inet block OUTPUT");
-    // 清空表
-    nf_exit_cmds.emplace_back("nft flush table inet block");
-    // 删除表
-    nf_exit_cmds.emplace_back("nft delete table inet block");
-
-    exec_rules(nf_exit_cmds);
   }
 
   void exec_rules(std::vector<std::string> &cmds) {

@@ -7,7 +7,7 @@
 int main(int argc, char *agrv[]) {
   boost::filesystem::path cur_path =
       boost::dll::program_location().parent_path();
-  boost::filesystem::path cfg_path = cur_path / "config.toml";
+  boost::filesystem::path cfg_path = cur_path / "domain_block_service.toml";
 
   // 解析配置文件
   config::instance().parse_toml(cfg_path);
@@ -25,7 +25,10 @@ int main(int argc, char *agrv[]) {
   // 创建server对象
   server<nf_connection> s(config::instance().get_str("ip"),
                           std::to_string(config::instance().get_int("port")));
+  nf_help::instance(); // 显示的在server启动前创建nftalbe的表和链
   s.run();
+
+  nf_help::instance().flush_all();
   LOG_DEBUG("process end.");
   return 0;
 }

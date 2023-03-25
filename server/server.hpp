@@ -18,6 +18,7 @@ public:
     m_signals.add(SIGTERM);
     m_signals.async_wait([this](boost::system::error_code ec, int signo) {
       if (signo == SIGINT || signo == SIGTERM) {
+        LOG_DEBUG("server receive signo: {}", signo);
         stop();
       }
     });
