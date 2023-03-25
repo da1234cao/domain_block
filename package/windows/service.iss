@@ -38,9 +38,9 @@ Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.i
 ; 安装服务程序
 ; flag的参数分别是：
 ; ignoreversion指定在替换同版本的应用程序文件时不弹出提示
-Source: "..\..\bin\Debug\domain_block_service.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\bin\Debug\block.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\bin\Debug\config.toml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\bin\Release\domain_block_service.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\bin\Release\block.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\windows\WFP\service\domain_block_service.toml"; DestDir: "{app}"; Flags: ignoreversion
 
 ; 安装驱动程序
 Source: "..\..\windows\WFP\block\x64\Debug\block.sys"; DestDir: "{app}"; Flags: restartreplace ignoreversion

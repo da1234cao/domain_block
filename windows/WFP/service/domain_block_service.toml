@@ -1,11 +1,11 @@
 # 日志文件
 [log]
-path = '/home/dacao/work/self/domain_block/linux/log.txt'
+path = 'C:\ProgramData\domain_block_service\log.txt'
 level = 'trace'
 max_file_size = '1' # MB单位
 max_files = '3'
 
 # 服务器配置
 [server]
-ip = '127.0.0.1'
-port = '6666'
+ip = '0.0.0.0'
+port = '6666' # 服务器监听端口

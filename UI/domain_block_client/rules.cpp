@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QString>
 #include <QTcpSocket>
+#include <QTextStream>
 #include <QtNetwork/QHostInfo>
 
 void rules::set_default_info_path() {
@@ -155,7 +156,12 @@ void rules::save_info_to_file() {
     QTextStream stream(&rules_file);
     for (auto &info : m_rules_info) {
       // 获取tuple的最后一个元素有点麻烦，这里直接使用数字
+#ifdef _WIN32
+      stream << std::get<0>(info) << m_separator << std::get<1>(info)
+             << Qt::endl;
+#else
       stream << std::get<0>(info) << m_separator << std::get<1>(info) << endl;
+#endif
     }
     rules_file.close();
   }

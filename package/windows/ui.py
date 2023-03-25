@@ -35,7 +35,7 @@ def copy_files_and_dirs(src_dir, dst_dir, items):
 
 if __name__ == '__main__':
     # 拷贝需要的二进制文件
-    bin_dir = "../../UI/build-domain_block_client-Desktop_Qt_6_4_2_MSVC2019_64bit-Release"
+    bin_dir = "../../bin/Release"
     dst_dir = "ui-output"
     items = [
         'domain_block_client.exe'
@@ -45,11 +45,11 @@ if __name__ == '__main__':
     # 拷贝需要的资源文件
     res_dir = "../../UI/domain_block_client"
     items = [
-        'domain_block.ini'
+        'domain_block_client.ini'
     ]
     copy_files_and_dirs(res_dir, dst_dir, items)
 
-    # 进入output目录
+    # 进入ui-output目录
     os.chdir(dst_dir)
     result = subprocess.run(
         ["windeployqt", "domain_block_client.exe"], capture_output=True)
